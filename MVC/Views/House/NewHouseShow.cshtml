@@ -1,0 +1,108 @@
+﻿
+<body>
+
+    <div id="box" >
+        <div class="demoTable">
+            搜索：
+            <div class="layui-inline">
+                <input class="layui-input" v-model="condition" id="iInquire" placeholder="请输入你要查询的关键字">
+            </div>
+            <button class="layui-btn" data-type="reload" v-on:click="BtnSel(condition)">搜索</button>
+            <input type="button" class="layui-btn layui-btn-lg layui-icon layui-icon-addition" value="新增新房信息" v-on:click="GotoAdd()" />
+        </div>
+        <table class="layui-table" id="test">
+            <thead>
+                <tr>
+                    <th style="text-align:center">新房Id</th>
+                    <th style="text-align:center">新房名称</th>
+                    <th style="text-align:center">新房地址</th>
+                    <th style="text-align:center">新房户型</th>
+                    <th style="text-align:center">新房图片</th>
+                    <th style="text-align:center">建筑面积</th>
+                    <th style="text-align:center">新房价格</th>
+                    <th style="text-align:center">新房购买状态</th>
+                    <th style="text-align:center">删除操作</th>
+                    <th style="text-align:center">操作</th>
+                </tr>
+            </thead>
+            <tr v-for="item in emps">
+                <td style="text-align:center" v-text="item.homeId"></td>
+                <td style="text-align:center" v-text="item.homeName"></td>
+                <td style="text-align:center" v-text="item.homeAddress"></td>
+                <td style="text-align:center" v-text="item.homeDesign"></td>
+                <td style="text-align:center">
+                    <img src="~/img/aa.png" />
+                </td>
+                <td style="text-align:center" v-text="item.homeArea"></td>
+                <td style="text-align:center" v-text="item.homePrice"></td>
+                <td style="text-align:center" v-text="item.homeMarketType=='1'?'在售':'售空'"></td>
+                <td style="text-align:center">
+                    <input type="button" class="layui-btn" value="删除" v-on:click="Del(item.homeId)" />
+                </td>
+                <td style="text-align:center">
+                    <input type="button" class="layui-btn" value="房屋详细信息" v-on:click="Show(item.homeId)" />
+                    <input type="button" class="layui-btn" value="地图导航" v-on:click="GoMap()" />
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+<script>
+    new Vue({
+        el: "#box",
+        data: {
+            emps: '',
+            condition: ''
+        },
+        mounted() {
+            axios.get('http://localhost:59475/api/Values/NewHomeShow')
+                .then(response => (this.emps = response.data))
+                .catch(function (error) { // 请求失败处理
+                    console.log(error);
+                });
+        },
+        //跳转反填页面
+        methods: {
+            Show(homeId) {
+                location.href = "/House/NewHomeDetial?id=" + homeId;
+            },
+            //查询按钮
+            BtnSel(condition) {
+                axios.get('http://localhost:59475/api/Values/NewHomeShow', {
+                    params: {
+                        condition: condition
+                    }
+                })
+                    .then(response => (this.emps = response.data))
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+            },
+            Del(homeId) {
+                if (confirm('确定要删除这条信息吗？')) {
+                    axios.delete('http://localhost:59475/api/Values/DelNewHomeList?id=' + homeId)
+                        .then(function (response) {
+                            if (response.data > 0) {
+                                alert('删除成功!!!');
+                                location.reload();
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        })
+                }
+            },
+            GotoAdd(){
+            location.href="/House/AddNewhome";
+            },
+            GoMap(){
+            location.href="/House/BaiDuMap";
+            }
+        },
+
+    })
+</script>
+
+

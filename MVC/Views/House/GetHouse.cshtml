@@ -1,0 +1,73 @@
+﻿
+<body>
+    <div id="app">
+        <table class="layui-table table table-bordered">
+            <thead>
+                <tr>
+                    <th>分类名称</th>
+                    <th>房源图片</th>
+                    <th>类型</th>
+                    <th>分类图标</th>
+                    <th>排序</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in emps">
+                    <td v-text="item.hpt_Name"></td>
+                    <td><img :src="item.hpt_Image" style="height:50px;width:50px" /></td>
+                    <td v-text="item.hpt_Site"></td>
+                    <td v-text="item.hpt_Ara"></td>
+                    <td v-text="item.hpt_Prc"></td>
+                    <td v-text="item.hpt_Sta"></td>
+                    <td>
+
+                        <label v-on:click="Add(item.gcY_ID)">添加子目录</label>
+                        
+                        <label v-on:click="del(item.gcY_ID)">删除</label>
+                        <label v-on:click="upd(item.SPC_Id)">编辑</label>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script type="text/javascript">
+        new Vue({
+            el: '#app',
+            data: {
+                emps: ''
+            },
+            //(钩子函数作用=初始化加载)
+            mounted() {
+                axios
+                    .get('http://localhost:59475/api/Values/ShowHotpost')
+                    .then(response => (this.emps = response.data))
+                    .catch(function (error) { // 请求失败处理
+                        console.log(error);
+                    });
+            },
+            methods: {
+               @* del(id) {
+                    if (confirm('您确定删除吗?')) {
+                        axios.delete('http://localhost:59475/api/LiveComm/DelGoodsCategories?id=' + id)
+                            .then(function (response) {
+                                if (response.data > 0) {
+                                    alert("删除成功");
+                                    location.reload();
+                                }
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            });
+                    }
+                },
+                Add() {
+                    location.href = "/Seconds/AddGetGoodsCategories"
+                }
+                *@
+            }
+        })
+    </script>
+
+</body>

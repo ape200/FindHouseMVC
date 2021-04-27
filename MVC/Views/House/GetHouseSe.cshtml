@@ -1,0 +1,71 @@
+﻿
+<body>
+    <div id="app">
+        <table class="layui-table table table-bordered">
+            <thead>
+                <tr>
+                    <th>二手房名称</th>
+                    <th>二手房类型</th>
+                    <th>二手房产权年限</th>
+                    <th>状态</th>
+                    <th>房源概况</th>
+                    <th>小区概况</th>
+                    <th>房价参考</th>
+                    <th>房价总价</th>
+                    <th>热度</th>
+                    <th>时间</th>
+                    <th>图片</th>
+                    <th>面积</th>
+                    <th>户型</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in emps">
+                    <td v-text="item.se_Name"></td>
+                    <td v-text="item.se_Type"></td>
+                    <td v-text="item.se_YearXian"></td>
+                    <td v-text="item.se_State"></td>
+                    <td v-text="item.se_SurveyFang"></td>
+                    <td v-text="item.se_SurveyQu"></td>
+                    <td v-text="item.se_ReferencePrice"></td>
+                    <td v-text="item.se_HousePrise"></td>
+                    <td v-text="item.se_Heat"></td>
+                    <td v-text="item.se_Time"></td>
+                    <td ><img :src="item.se_Img" style="height:50px;width:50px"></td>
+                    <td v-text="item.se_Area"></td>
+                    <td v-text="item.se_HouesType"></td>
+                    <td>
+
+                        <label v-on:click="Add(item.gcY_ID)">添加</label>
+
+                        <label v-on:click="del(item.gcY_ID)">删除</label>
+                        <label v-on:click="upd(item.SPC_Id)">编辑</label>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script type="text/javascript">
+        new Vue({
+            el: '#app',
+            data: {
+                emps: ''
+            },
+            //(钩子函数作用=初始化加载)
+            mounted() {
+                axios
+                    .get('http://localhost:59475/api/Values/ShowSeHo')
+                    .then(response => (this.emps = response.data))
+                    .catch(function (error) { // 请求失败处理
+                        console.log(error);
+                    });
+            },
+            methods: {
+               
+            }
+        })
+    </script>
+
+</body>
+

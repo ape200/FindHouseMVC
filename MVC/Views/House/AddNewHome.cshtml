@@ -1,0 +1,114 @@
+﻿<body>
+    <div id="addDiv">
+        @*<div>
+            Id：<input type="text" v-model="homeId"/>
+        </div>*@
+        <div class="layui-form-item">
+            <label class="layui-form-label">楼房名称</label>
+            <input type="text" style="width:600px" v-model="homeName" class="layui-input" />
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">楼房特点：</label>
+          <input type="text" style="width:600px" v-model="homeCharacteristic" class="layui-input" />
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">物业类型：</label>
+            <input type="text" style="width:600px" v-model="realEstate" class="layui-input" />
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"> 开发商：</label>
+           <input type="text" style="width:600px" v-model="homeDevelopers" class="layui-input" />
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">新房地址：</label>
+            <input type="text" style="width:600px" v-model="homeAddress" class="layui-input" />
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">新房户型：</label>
+            <input type="text" style="width:600px" v-model="homeDesign" class="layui-input" />
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">新房图片：</label>
+             <input type="file" @@change="uploadFile" ref="Default" />
+            <img v-bind:src="homeIamge" style="width: 200px;height:200px;" />
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">新房建筑面积：</label>
+            <input type="text" style="width:600px" v-model="homeArea" class="layui-input" />
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">新房价格：</label>
+            <input type="text" style="width:600px" v-model="homePrice" class="layui-input" />
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"> 新房出售状态:</label>
+           <input type="text" style="width:600px" v-model="homeMarketType" class="layui-input" />
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">售楼处电话：</label>
+            <input type="text" style="width:600px" v-model="homeSalesOffice" class="layui-input" />
+        </div>
+        <div class="layui-form-item">
+            <button type="button"v-on:click="addMenu" style="width:600px" class="layui-btn">添加新房信息</button>
+            @*<input type="button"  value="添加" class="layui-btn layui-btn-primary" />*@
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        //使用axios实现 Vue.js 2.0 版本推荐使用 axios 来完成 ajax 请求。Axios 是一个基于 Promise 的 HTTP 库，可以用在浏览器和 node.js 中。
+
+        new Vue({
+            el: '#addDiv',
+            data: {
+                homeName:'',
+                homeCharacteristic: '',
+                realEstate: '',
+                homeDevelopers: '',
+                homeAddress: '',
+                homeDesign: '',
+                homeIamge: null,
+                homeArea: '',
+                homePrice:0,
+                homeMarketType: 0,
+                homeSalesOffice: ''
+            },
+            methods: {
+                addMenu() {
+                    axios.post('http://localhost:59475/api/Values/AddNewHome',
+                        {
+                          /*  homeId: this.homeName,*/
+                            homeName: this.homeName,
+                            homeCharacteristic: this.homeCharacteristic,
+                            realEstate: this.realEstate,
+                            homeDevelopers: this.homeDevelopers,
+                            homeAddress: this.homeAddress,
+                            homeDesign: this.homeDesign,
+                            homeIamge: this.homeIamge,
+                            homeArea: this.homeArea,
+                            homePrice: this.homePrice,
+                            homeMarketType: this.homeMarketType,
+                            homeSalesOffice: this.homeSalesOffice
+                        })
+                        .then(function (response) {
+                            if (response.data > 0) {
+                                alert("添加成功");
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+                uploadFile() {
+                    var that = this
+                    var f = new FileReader();
+                    f.readAsDataURL(this.$refs.Default.files[0])
+                    f.onload = function () {
+                        that.homeIamge = f.result;
+                    }
+                }
+            }
+        })
+    </script>
+
+   
+</body>

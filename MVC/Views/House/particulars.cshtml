@@ -1,0 +1,90 @@
+﻿
+<body>
+    <div class="addDiv" style="width:500px;height:500px;">
+        <p>
+            头像： <input type="file"   ref="img"  @@change="uploadFile" />
+            <img v-bind:src="a.photo" style="width: 200px;height:200px;" />
+        </p>
+        <p>
+            员工用户<input type="text" v-model="a.name" class="layui-input" />
+        </p>
+
+
+        <p>
+            手机：<input type="number" v-model="a.phone" class="layui-input" />
+        </p>
+
+        <p>
+            性别：<input type="text" v-model="a.sex" class="layui-input" />
+        </p>
+        <input type="button" v-on:click="edit" value="修改" class="layui-btn" />
+
+    </div>
+</body>
+
+<script type="text/javascript">
+
+        new Vue({
+            el: '.addDiv',
+           
+            data: {
+                user: '',
+                a: {
+                    id:'',
+                    name: '',
+                    phone: '',
+                    sex:'',
+
+                }
+
+            },
+            mounted() {
+
+                axios
+                    .get('http://localhost:59475/api/Values/Upid?id=' +@ViewBag.id)
+                    //.then(function (a) {
+                    //    this.emps = a.data.result;
+                    .then(res => (this.a = res.data.users))
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+            },
+            methods: {
+                edit() {
+                    alert(1);
+                    axios
+                        .put('http://localhost:59475/api/Values/EditUser', {
+                        id: @ViewBag.id,
+                        name: this.a.name,
+                           phone: this.a.phone,
+                            photo: this.a.photo,
+                        sex: this.a.sex,
+                    })
+                        .then(function (response) {
+                            if (response.data > 0) {
+                                alert("修改成功");
+                                location.href = 'http://localhost:59475/House/UsersShow';
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+
+                    uploadFile() {
+                    var that = this
+                    //注意这里要使用that保存this，不然下方调用f.onload的时候会出现问题
+                    console.log(this.$refs.img.files)
+                    var f = new FileReader()//
+                    f.readAsDataURL(this.$refs.img.files[0])
+                    //  alert(this.$refs.img.files[0]);
+                    f.onload = function () {
+                        that.a.photo = f.result
+                    }
+
+                }
+            }
+
+        
+        })
+</script>

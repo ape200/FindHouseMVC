@@ -1,0 +1,110 @@
+﻿
+
+    <div id="Index">
+    
+
+        <div style="width:400px">
+            <input type="text" v-model="this.name" name="title" required lay-verify="required" placeholder="请输入名称" autocomplete="off"  style="width:200px;height:35px">
+        <button v-on:click="query()" class="layui-btn">查询</button>
+        </div>
+
+
+        <table class="layui-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>头像</th>
+                    <th>姓名</th>
+                    <th>手机号</th>
+                    <th>性别</th>
+                    <th>操作</th>
+                  
+                </tr>
+            </thead>
+            <tbody>
+                @*<tr v-for="item in user.users">
+                    <td v-for="(value,key) in item">{{value}}</td>
+                </tr>*@
+                <tr v-for="item in user.users">
+                    <td v-text="item.id"></td>
+                    <td><a v-on:click="Edit(item.id)"><img v-bind:src="item.photo" width="50" height="50" /></a></td>
+                    <td v-text="item.name"></td>
+                    <td v-text="item.phone"></td>
+                    <td v-text="item.sex"></td>
+                    <td>
+                        <button v-on:click="attentionshow(item.id)" class="layui-btn layui-btn-xs">查看关注</button>
+                        <button v-on:click="Del(item.id)" class="layui-btn layui-btn-xs layui-btn-danger">删除</button>
+                    </td>
+                   
+                </tr>
+            </tbody>
+
+        </table>
+        <a href="/House/register">去注册用户></a>
+    </div>
+    <script type="text/javascript">
+        new Vue({
+            el: '#Index',
+            data: {
+                user: ''
+            },
+            mounted() {
+                axios
+                    .get('http://localhost:59475/api/Values/show')
+                    .then(response => (this.user = response.data))
+                    //.then(function (res) {
+                    //    this.user = res.data
+                    //})
+                    .catch(function (error) { // 请求失败处理
+                        console.log(error);
+                    });
+            },
+            methods: {
+
+                attentionshow(id) {
+                    location.href = "/House/attentionshow?id=" + id;
+
+                },
+                Edit(id) {
+                    location.href = "/House/particulars?id=" + id;
+                },
+                query()
+                {
+                        axios
+                            .get('http://localhost:59475/api/Values/queryuser?name=' + name) 
+                            .then(response => (this.user = response.data))
+                            //.then(function (res) {
+                            //    this.user = res.data
+                            //})
+                            .catch(function (error) { // 请求失败处理
+                                console.log(error);
+                            });
+                   
+                    
+                },
+                Del(id)
+                {
+                    axios
+                        .delete('http://localhost:59475/api/Values/DeleteUser?Id=' + id)
+                        .then(function (response) {
+                            if (response.data > 0) {
+                                alert("删除成功");
+                                location.href = "/House/UsersShow";
+                            }
+                            else {
+                                alert('删除失败');
+                            }
+
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                }
+            }
+
+        })
+
+
+
+    </script>
+

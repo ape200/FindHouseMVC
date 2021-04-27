@@ -1,0 +1,61 @@
+﻿
+
+<body>
+    <div id="attention">
+        <table class="layui-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>头像</th>
+                    <th>姓名</th>
+                    <th>手机号</th>
+                    <th>性别</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @*<tr v-for="item in user.users">
+                        <td v-for="(value,key) in item">{{value}}</td>
+                    </tr>*@
+                <tr v-for="item in user.users">
+                    <td v-text="item.id"></td>
+                    <td><img v-bind:src="item.photo" width="50" height="50" /></td>
+                    <td v-text="item.name"></td>
+                    <td v-text="item.phone"></td>
+                    <td v-text="item.sex"></td>
+
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</body>
+ 
+<script type="text/javascript">
+    new Vue({
+        el: '#attention',
+        data: {
+            user: ''
+        },
+        mounted() {
+            axios
+                .get('http://localhost:59475/api/Values/attentionshow?Gid='+@ViewBag.id)
+                .then(response => (this.user = response.data))
+                //.then(function (res) {
+                //    this.user = res.data
+                //})
+                .catch(function (error) { // 请求失败处理
+                    console.log(error);
+                });
+        },
+        methods: {
+
+            attentionshow() {
+                location.href = "/user/attentionshow";
+            }
+        }
+
+    })
+
+</script>
+

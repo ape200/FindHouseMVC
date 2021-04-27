@@ -1,0 +1,87 @@
+﻿
+
+<body>
+    <div class="addDiv" style="width:500px;height:500px;">
+
+            <p>
+                头像： <input type="file" @@change="uploadFile" ref="img" />
+                <img v-bind:src="SKC_Img" style="width: 200px;height:200px;" />
+            </p>
+            <p>
+                员工用户:<input type="text" v-model="Cname" class="layui-input"  />
+                <span id="sCname"></span>
+            </p>
+
+            <p>
+                密码：<input type="password" v-model="Pass" class="layui-input" />
+            </p>
+
+            <p>
+                手机：<input type="number" v-model="phone" class="layui-input" />
+            </p>
+
+            <p>
+                性别：<input type="text" v-model="sex" class="layui-input" />
+            </p>
+
+
+
+            <p>
+                <input type="button" v-on:click="addMenu" value="注册" class="layui-btn" />
+
+            </p>
+      
+    </div>
+
+    <script type="text/javascript">
+        new Vue({
+            el: '.addDiv',
+            data: {
+
+                SKC_Img: null,
+                Cname: '',
+                Pass: '',
+                phone: '',
+                sex: '',
+
+
+
+            },
+            methods: {
+                addMenu() {
+                    axios
+                        .post('http://localhost:59475/api/Values/Adduser', {
+                        photo: this.SKC_Img,
+                        name: this.Cname,
+                        password: this.Pass,
+                            phone: this.phone,
+                        sex: this.sex,
+
+                    })
+                        .then(function (response) {
+                            if (response.data > 0) {
+                                alert("添加成功");
+                                location.href = 'http://localhost:4015/House/UsersShow';
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+               
+                uploadFile() {
+                    var that = this
+                    //注意这里要使用that保存this，不然下方调用f.onload的时候会出现问题
+                    console.log(this.$refs.img.files)
+                    var f = new FileReader()//
+                    f.readAsDataURL(this.$refs.img.files[0])
+                    //  alert(this.$refs.img.files[0]);
+                    f.onload = function () {
+                        that.SKC_Img = f.result
+                    }
+
+                }
+            }
+        })
+    </script>
+</body>

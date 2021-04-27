@@ -1,0 +1,252 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@using API.Models
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>找房管理系统</title>
+
+    <script src="~/layui-v2.5.7/layui/layui.js"></script>
+    <link href="~/layui-v2.5.7/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/js/axios.min.js"></script>
+    <script src="~/js/vue.js"></script>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/admin/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/admin/css/admin.css" rel="stylesheet" />
+    <style>
+
+        .time1 {
+            width: 100%;
+            height: 50px;
+            color: white;
+            line-height: 50px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <div class="layui-logo">二组找房系统</div>
+            <!-- 头部区域（可配合layui 已有的水平导航） -->
+            @*<ul class="layui-nav layui-layout-left">
+                   头部左边导航栏
+                </ul>*@
+            @*头部右边导航栏*@
+            <ul class="layui-nav layui-layout-right">
+                @*左侧用户信息显示*@
+                <li class="layui-nav-item">
+
+                    <a href="javascript:;" data-url="admin-info.html" data-id='5' data-text="个人信息">@(((EmployeeInfo)ViewBag.em).EName)</a>
+
+
+                </li>
+                <li class="layui-nav-item"><a href="/House/Login">退出</a></li>
+            </ul>
+            @*头部的动态时间显示*@
+            <div id="timeShow" class="time1"></div>
+        </div>
+
+        <div class="layui-side layui-bg-black">
+            <div class="layui-side-scroll">
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                    @*左侧下拉导航栏*@
+                    @*<li class="layui-nav-item layui-nav-itemed">
+                            <a class="" href="javascript:;">模板一</a>
+                            <dl class="layui-nav-child">
+                                <dd><a href="javascript:;">模板 1-1</a></dd>
+                                <dd><a href="">模板 1-2</a></dd>
+                            </dl>
+                        </li>*@
+
+                    @{ int i = 2;
+                    }
+                    @foreach (var item in (List<MenuInfo>)ViewBag.pmenu)
+                    {
+
+                        <li class="layui-nav-item layui-nav-itemed">
+                            <a href="@item.URL" data-url="@item.URL"><i class="iconfont">@Html.Raw("&#xe60" + i + ";")</i>@item.MName</a>
+                            @{
+                                List<MenuInfo> menu = (List<MenuInfo>)ViewBag.menu;
+                                List<MenuInfo> childMenu = menu.Where(m => m.PId == item.MId).ToList();
+                                if (childMenu.Count > 0)
+                                {
+                                    <dl class="layui-nav-child">
+                                        @foreach (var child in childMenu)
+                                        {
+                                            <dd><a href="@child.URL" data-url="@child.URL" data-id='@child.MId' data-text="@child.MName"><span class="l-line"></span>@child.MName</a></dd>
+                                        }
+                                    </dl>
+                                }
+
+                            }
+                        </li>
+
+                        i++;
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <div class="layui-body">
+            <!-- 内容主体区域 -->
+            <div style="padding: 15px;">@RenderBody()</div>
+        </div>
+
+        <div class="layui-footer">
+            <!-- 底部固定区域 -->
+
+        </div>
+    </div>
+    <script src="~/admin/layui/layui.js" charset="utf-8"></script>
+    <script src="~/admin/js/common.js" charset="utf-8"></script>
+    <script src="~/admin/js/main.js" charset="utf-8"></script>
+    <script>
+        //JavaScript代码区域
+        layui.use('element', function () {
+            var element = layui.element;
+
+        });
+    </script>
+    <script language="javascript">
+
+        var t = null;
+
+        t = setTimeout(time, 1000);//开始执行
+
+        function time() {
+
+            clearTimeout(t);//清除定时器
+
+            dt = new Date();
+
+            var y = dt.getYear() + 1900;
+
+            var mm = dt.getMonth() + 1;
+
+            var d = dt.getDate();
+
+            var weekday = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+
+            var day = dt.getDay();
+
+            var h = dt.getHours();
+
+            var m = dt.getMinutes();
+
+            var s = dt.getSeconds();
+
+            if (h < 10) { h = "0" + h; }
+
+            if (m < 10) { m = "0" + m; }
+
+            if (s < 10) { s = "0" + s; }
+
+            document.getElementById("timeShow").innerHTML = "现在的时间为：" + y + "年" + mm + "月" + d + "日" + weekday[day] + " " + h + ": " + m + ": " + s + "";
+
+            t = setTimeout(time, 1000); //设定定时器，循环执行
+
+        }
+
+    </script>
+</body>
+</html>
+
+@*
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <title>CRM后台管理系统</title>
+
+    </head>
+    <body>
+        <div class="main-layout" id='main-layout'>
+            <!--侧边栏-->
+            <div class="main-layout-side">
+                <div class="m-logo">
+                </div>
+                <ul class="layui-nav layui-nav-tree" lay-filter="leftNav">
+                    @{ int i = 2;
+                    }
+                    @foreach (var item in (List<MenuInfo>)ViewBag.pmenu)
+                    {
+
+                        <li class="layui-nav-item">
+                            <a href="javascript:;" data-url="@item.URL"><i class="iconfont">@Html.Raw("&#xe60" + i + ";")</i>@item.MName</a>
+                            @{
+                                List<MenuInfo> menu = (List<MenuInfo>)ViewBag.menu;
+                                List<MenuInfo> childMenu = menu.Where(m => m.PId == item.MId).ToList();
+                                if (childMenu.Count > 0)
+                                {
+                                    <dl class="layui-nav-child">
+                                        @foreach (var child in childMenu)
+                                        {
+                                            <dd><a href="javascript:;" data-url="@child.URL" data-id='@child.MId' data-text="@child.MName"><span class="l-line"></span>@child.MName</a></dd>
+                                        }
+                                    </dl>
+                                }
+
+                            }
+                        </li>
+
+                        i++;
+                    }
+
+                </ul>
+            </div>
+            <!--右侧内容-->
+            <div class="main-layout-container">
+                <!--头部-->
+                <div class="main-layout-header">
+                    <div class="menu-btn" id="hideBtn">
+                        <a href="javascript:;">
+                            <span class="iconfont">&#xe60e;</span>
+                        </a>
+                    </div>
+                    <ul class="layui-nav" lay-filter="rightNav">
+                        <li class="layui-nav-item"><a href="javascript:;" data-url="email.html" data-id='4' data-text="邮件系统"><i class="iconfont">&#xe603;</i></a></li>
+                        <li class="layui-nav-item">
+                            <a href="javascript:;" data-url="admin-info.html" data-id='5' data-text="个人信息">@(((EmployeeInfo)ViewBag.em).EName)</a>
+                        </li>
+                        <li class="layui-nav-item"><a href="javascript:;">退出</a></li>
+                    </ul>
+                </div>
+                <!--主体内容-->
+                <div class="main-layout-body">
+                    <!--tab 切换-->
+                    <div class="layui-tab layui-tab-brief main-layout-tab" lay-filter="tab" lay-allowClose="true">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this welcome">后台主页</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show" style="background: #f5f5f5;">
+                                <!--1-->
+                                <iframe src="welcome.html" width="100%" height="100%" name="iframe" scrolling="auto" class="iframe" framborder="0"></iframe>
+                                <!--1end-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--遮罩-->
+            <div class="main-mask">
+
+            </div>
+        </div>
+        <script type="text/javascript">
+            var scope = {
+                link: './welcome.html'
+            }
+        </script>
+        <script src="~/admin/layui/layui.js" charset="utf-8"></script>
+        <script src="~/admin/js/common.js" charset="utf-8"></script>
+        <script src="~/admin/js/main.js" charset="utf-8"></script>
+    </body>
+    </html>
+*@

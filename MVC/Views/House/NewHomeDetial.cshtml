@@ -1,0 +1,80 @@
+﻿
+
+<body>
+    <div id="boxdetial" style="width:700px;margin:0 auto">
+        <table class="layui-table" id="test">
+            <tr style="border:none">
+                <td></td>
+                <td><input type="hidden" v-model="a.homeId" style="border:none" name="title" required lay-verify="required" autocomplete="off" class="layui-input"></td>
+            </tr>
+            <tr>
+                <td>楼房名称</td>
+                <td><input type="text" v-model="a.homeName" style="border:none" name="title" required lay-verify="required" autocomplete="off" class="layui-input">    </td>
+            </tr>
+            <tr>
+                <td>楼房特点</td>
+                <td><input type="text" v-model="a.homeCharacteristic" style="border:none" name="title" required lay-verify="required" autocomplete="off" class="layui-input"></td>
+            </tr>
+            <tr>
+                <td>物业类型</td>
+                <td><input type="text" v-model="a.realEstate" style="border:none" name="title" required lay-verify="required" autocomplete="off" class="layui-input"></td>
+            </tr>                     
+            <tr>                      
+                <td>开发商</td>       
+                <td><input type="text" v-model="a.homeDevelopers" style="border:none" name="title" required lay-verify="required" autocomplete="off" class="layui-input"></td>
+            </tr>                     
+            <tr>                      
+                <td>新房地址</td>     
+                <td><input type="text" v-model="a.homeAddress" style="border:none" name="title" required lay-verify="required" autocomplete="off" class="layui-input"></td>
+            </tr>                      
+            <tr>                       
+                <td>新房户型</td>      
+                <td><input type="text" v-model="a.homeDesign" style="border:none" name="title" required lay-verify="required" autocomplete="off" class="layui-input"></td>
+            </tr>                     
+            <tr>                      
+                <td>新房图片</td>     
+                <td>
+                <input type="text" v-model="a.homeIamge" style="border:none" name="title" required lay-verify="required" autocomplete="off" class="layui-input">
+                </td>
+            </tr>                     
+            <tr>                      
+                <td>建筑面积</td>     
+                <td><input type="text" v-model="a.homeArea" style="border:none" name="title" required lay-verify="required" autocomplete="off" class="layui-input"></td>
+            </tr>                     
+            <tr>                      
+                <td>新房价格</td>     
+                <td><input type="text" v-model="a.homePrice" style="border:none" name="title" required lay-verify="required" autocomplete="off" class="layui-input"></td>
+            </tr>                     
+            <tr>                      
+                <td>出售状态</td>     
+                <td><input type="text" v-model="a.homeMarketType=='1'?'出售':'待售'" style="border:none" name="title" required lay-verify="required" autocomplete="off" class="layui-input"></td>
+            </tr>                    
+            <tr>                     
+                <td>售楼处电话</td>  
+                <td><input type="text" v-model="a.homeSalesOffice" style="border:none" name="title" required lay-verify="required" autocomplete="off" class="layui-input"></td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+<script>
+    var id=@ViewBag.id;
+    var Vue = new Vue({
+        el: "#boxdetial",
+        data: {
+            a:'',
+           //a: {
+           //     homeId: "",
+           //     homeName:''
+           // }
+        },
+        mounted() {
+            axios.get('http://localhost:59475/api/Values/GetHomeDetail?id=' + id)
+                .then(response => (this.a = response.data.users))
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }
+    })
+</script>
+
